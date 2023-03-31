@@ -14,12 +14,15 @@ builder.Services.AddTransient<IDaoMain<Order>, DbDaoOrder>();
 builder.Services.AddTransient<IDaoMain<OrderProduct>, DbDaoOrderProduct>();
 
 //это чек
-//builder.Services.AddTransient<IDaoReceipt, DaoReceipt>();
+builder.Services.AddTransient<IDaoReceipt, DaoReceipt>();
+//это информация о заказе
+builder.Services.AddTransient<IDaoInfo, DaoInfo>();
+
 
 
 var app = builder.Build();
 
-app.MapGet("/", () => new {Time = DateTime.Now, Message = "pong"});
+app.MapGet("/", () => new {Message = "pong"});
 
 
 //эндпоинты для работы с клиентом
@@ -126,9 +129,16 @@ app.MapPost("/orderproduct/update", async (OrderProduct op, IDaoMain<OrderProduc
     return await daoOP.UpdateAsync(op);
 });
 
-//app.MapGet("/receipt", async (Receipt order, IDaoReceipt dr) =>
-//{
-//    return await dr.GetReceipt(order);
-//});
+//эндпоинт для чека
+app.MapGet("/receipt", async (IDaoReceipt dr, int id) =>
+{
+    return await dr.GetReceipt(id);
+});
+
+//эндпоинт информации о заказе
+app.MapGet("/information", async ( IDaoInfo dao, int id) =>
+{
+    return await dao.GetInfo(id);
+});
 
 app.Run();

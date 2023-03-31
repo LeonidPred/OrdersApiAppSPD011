@@ -27,7 +27,13 @@ namespace OrdersApiAppSPD011.Service.ClientService
             {
                 return Results.NotFound(new { message = "Нет такого заказа" });
             }
-
+            //получаем расшивки с этим заказом
+            var orderproducts = daodb.OrderProducts.Where(o => o.OrderId == id.Id);
+            //удаляем расшивки с этим заказом
+            foreach(OrderProduct product in orderproducts)
+            {
+                daodb.Remove(product);
+            }
             daodb.Orders.Remove(order);
             await daodb.SaveChangesAsync();
 

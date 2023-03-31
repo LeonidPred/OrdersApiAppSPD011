@@ -4,6 +4,6 @@ namespace OrdersApiAppSPD011.Service
 {
     public interface IDaoReceipt
     {
-        Task<IResult> GetReceipt(Receipt Id);
+        Task<IResult> GetReceipt(int Id);
     }
 }

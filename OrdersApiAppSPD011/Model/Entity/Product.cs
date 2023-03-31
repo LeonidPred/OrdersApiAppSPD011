@@ -7,6 +7,5 @@
         public int Article { get; set; }
         public int Price { get; set; }
         public ICollection<OrderProduct>? OrderProducts { get; set; }
-
     }
 }

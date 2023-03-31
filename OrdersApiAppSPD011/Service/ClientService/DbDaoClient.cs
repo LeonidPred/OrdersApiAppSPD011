@@ -28,6 +28,15 @@ namespace OrdersApiAppSPD011.Service.ClientService
             {
                 return Results.NotFound(new { message = "Нет такого клиента" });
             }
+            //получаем список заказов удаляемого клиента
+            var orders = daodb.Orders.Where(
+                c => c.ClientId == id.Id
+                );
+            //удаляем заказы клиента
+            foreach(Order order in orders)
+            {
+                daodb.Orders.Remove(order);
+            }
 
             daodb.Clients.Remove(client);
             await daodb.SaveChangesAsync();

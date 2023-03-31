@@ -14,24 +14,24 @@ namespace OrdersApiAppSPD011.Service
         }
 
         // Метод вывода суммы заказа
-        public async Task<IResult> GetReceipt(Receipt ord)
+        public async Task<IResult> GetReceipt(int ord)
         {
-            var order = await daodb.Orders.FirstOrDefaultAsync(o => o.Id == ord.Id);
+            var order = await daodb.Orders.FirstOrDefaultAsync(o => o.Id == ord);
 
             if (order == null)
             {
                 return Results.NotFound(new { message = "Такого заказа нет" });
             }
 
-            // здесь получаем расшивки с информацией о продукте
+            // здесь получаем расшивки с информацией о товаре
             var orderProducts = daodb.OrderProducts
-                .Where(op => op.OrderId == ord.Id)
-                .Include(p => p.Product);
+                .Where(orderproduct => orderproduct.OrderId == ord)
+                .Include(product => product.Product);
 
             // создание чека и добавление в него информации с расшивки
             var check = new Receipt()
             {
-                Id = ord.Id,
+                Id = ord,
                 ProductName = new(),
                 Count = new(),
                 Price = new(),
